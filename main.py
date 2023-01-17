@@ -21,12 +21,15 @@ def read_file(filename):
     return page
 
 
-def extract_data_pdf(page, dt):  #Нужна обработка ошибки NoneType на append
-    s_temp = {}
-    contract_num = re.search('\d{3}/\d{4}/\d{2}', page)
-    contract_date = re.search('\d{2}(\s|.)\w{2,8}(\s|.)\d{4}', page)
-    dt['Дата договора'].append(str(contract_date[0]))
-    dt['Номер договора'].append(str(contract_num[0]))
+def extract_data_pdf(page, dt):
+    s_temp = {'Дата договора': '\d{3}/\d{4}/\d{2}', 'Номер договора': '\d{2}(\s|.)\w{2,8}(\s|.)\d{4}'}
+    for key in s_temp:
+        val = re.search(s_temp[key], page)
+        if val is None:
+            val = 'Not Found'
+            dt[key].append(val)
+        else:
+            dt[key].append(val[0])
     return dt
 
 
@@ -42,5 +45,5 @@ def main(path_to_read, path_to_save):
 
 if __name__ == '__main__':
     ptr = r'D:\mypy\PDFConv2\testpdf'
-    pts = r'D:\example.xlsx'
+    pts = r'D:\mypy\PDFConv2\testpdf\example.xlsx'
     main(ptr, pts)
