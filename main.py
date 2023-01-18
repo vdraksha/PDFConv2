@@ -15,7 +15,7 @@ def iter_file(path_to_read, dt):
 def read_file(filename):
     with open(os.path.join(os.getcwd(), filename), 'rb') as fin:
         lt = list()
-        for line in PdfReader(fin)._get_page(0).extract_text():
+        for line in PdfReader(fin)._get_page(0).extract_text(): #Изменить на просмотр всех страниц
             lt.append(line)
         page = ''.join(lt)
     return page
@@ -33,8 +33,11 @@ def extract_data_pdf(page, dt):
     return dt
 
 
-def save_data(dt, path_to_save):  #Создать добавление новых строк в файл
-    return pandas.DataFrame(dt).to_excel(path_to_save)
+def save_data(dt, path_to_save):
+    df_new = pandas.DataFrame(dt)
+    df_old = pandas.read_excel(path_to_save)
+    df = pandas.concat([df_old, df_new], ignore_index=True)
+    return df.to_excel(path_to_save, index=False)
 
 
 def main(path_to_read, path_to_save):
