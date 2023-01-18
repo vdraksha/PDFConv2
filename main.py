@@ -7,22 +7,26 @@ import re
 
 def iter_file(path_to_read, dt):
     for filename in glob.glob(os.path.join(path_to_read, '*.pdf')):
-        page = read_file(filename)
-        dt = extract_data_pdf(page, dt)
+        read_file(filename, dt)
     return dt
 
 
-def read_file(filename):
+def read_file(filename, dt):
     with open(os.path.join(os.getcwd(), filename), 'rb') as fin:
         lt = list()
-        for line in PdfReader(fin)._get_page(0).extract_text(): #Изменить на просмотр всех страниц
-            lt.append(line)
-        page = ''.join(lt)
-    return page
+        reader = PdfReader(fin)
+        for i in range(len(reader.pages)):
+            page = reader.pages[i].extract_text()
+            extract_data_pdf(page, dt)
+    return dt
 
 
 def extract_data_pdf(page, dt):
-    s_temp = {'Дата договора': '\d{3}/\d{4}/\d{2}', 'Номер договора': '\d{2}(\s|.)\w{2,8}(\s|.)\d{4}'}
+    '''
+    Исправить регулярку на дате
+    Убрать повторения 1 файл = 1 номер договора/Not Found и т.п.
+    '''
+    s_temp = {'Дата договора': '\d{2}(\s|.)\w{2,8}(\s|.)\d{4}', 'Номер договора': '\d{3}/\d{4}/\d{2}'}
     for key in s_temp:
         val = re.search(s_temp[key], page)
         if val is None:
