@@ -20,8 +20,9 @@ def read_file(filename, dt):
 
 
 def extract_data_pdf(page, dt):
-    s_temp = {'Дата договора': '\d{2}( \w{2,8} |\.\d{2}\.)\d{2,4}',
-              'Номер договора': '\d{3}/\d{4}/\d{2}'}
+    s_temp = {'Дата договора': r'\d{2}( \w{2,8} |\.\d{2}\.)\d{2,4}',
+              'Номер договора': r'\d{3}/\d{4}/\d{2}',
+              'Контрагент': r'(Общество с ограниченной ответственностью | ООО) \"\w+\"'}
     for key in s_temp:
         val = re.search(s_temp[key], page)
         if val is None:
@@ -40,7 +41,7 @@ def save_data(dt, path_to_save):
 
 
 def main(path_to_read, path_to_save):
-    dt = {'Дата договора': [], 'Номер договора': []}
+    dt = {'Дата договора': [], 'Номер договора': [], 'Контрагент': []}
     iter_file(path_to_read, dt)
     return save_data(dt, path_to_save)
 
