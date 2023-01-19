@@ -3,8 +3,11 @@ import pandas
 import glob
 import os
 import re
-
-
+'''
+Извлекает с первой страницы договора, в формате pdf:
+дату, номер и контрагента договора.
+Сохраняет в excel-таблицу.
+'''
 def iter_file(path_to_read, dt):
     for filename in glob.glob(os.path.join(path_to_read, '*.pdf')):
         read_file(filename, dt)
@@ -47,6 +50,6 @@ def main(path_to_read, path_to_save):
 
 
 if __name__ == '__main__':
-    ptr = r'D:\mypy\PDFConv2\testpdf'
-    pts = r'D:\mypy\PDFConv2\testpdf\example.xlsx'
+    ptr = r'Путь до папки с pdf-файлами'
+    pts = r'Путь до excel таблицы + сам файл'
     main(ptr, pts)
