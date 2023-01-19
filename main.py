@@ -23,10 +23,9 @@ def read_file(filename, dt):
 
 def extract_data_pdf(page, dt):
     '''
-    Исправить регулярку на дате
     Убрать повторения 1 файл = 1 номер договора/Not Found и т.п.
     '''
-    s_temp = {'Дата договора': '\d{2}(\s|.)\w{2,8}(\s|.)\d{4}', 'Номер договора': '\d{3}/\d{4}/\d{2}'}
+    s_temp = {'Дата договора': '\d{2}( \w{2,8} |\.\d{2}\.)\d{2,4}', 'Номер договора': '\d{3}/\d{4}/\d{2}'}
     for key in s_temp:
         val = re.search(s_temp[key], page)
         if val is None:
